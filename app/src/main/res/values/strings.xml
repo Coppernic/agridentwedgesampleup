@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AgridentWedgeSampleUp</string>
+    <string name="no_data_read_yet">No data read yet</string>
+
+    <string name="hdx_freq">HDX Freq :</string>
+    <string name="hdx_rssi">HDX RSSI :</string>
+    <string name="fdx_rssi">FDX RSSI :</string>
+    <string name="rssi">RSSI :</string>
+    <string name="amplitude">Amplitude :</string>
+    <string name="serial_number">Serial Number :</string>
+    <string name="firmware">Firmware :</string>
+    <string name="tag_type">Tag type :</string>
+    <string name="timeout">Timeout :</string>
+    <string name="baudrate">Baudrate :</string>
+    <string name="delay_time">Delay time :</string>
+    <string name="output">Output :</string>
+
+</resources>
