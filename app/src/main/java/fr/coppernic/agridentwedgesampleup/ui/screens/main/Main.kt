@@ -51,22 +51,23 @@ fun MainScreen(
             FloatingActionButton(onClick = onStartScan) {
                 Icon(Icons.Filled.Add, "Floating action button.")
             }
-        }
+        },
     ) {
         Column(
-            modifier = modifier
-                .padding(it)
-                .fillMaxSize()
-                .background(Color.White),
+            modifier =
+                modifier
+                    .padding(it)
+                    .fillMaxSize()
+                    .background(Color.White),
         ) {
             IntentDataItem(
                 modifier = Modifier.fillMaxWidth(),
-                intentData = dataIntentRead
+                intentData = dataIntentRead,
             )
             IntentDataItem(
                 modifier = Modifier.fillMaxWidth(),
                 isNewScan = isNewScan,
-                isKeyboard = true
+                isKeyboard = true,
             )
         }
     }
@@ -85,7 +86,7 @@ fun IntentDataItem(
     // Request focus on the text field for keyboard wedge
     LaunchedEffect(isKeyboard) {
         if (isKeyboard) {
-            focusRequester.requestFocus()  // Set focus on the TextField
+            focusRequester.requestFocus() // Set focus on the TextField
         }
     }
 
@@ -98,7 +99,7 @@ fun IntentDataItem(
 
     Card(
         modifier = modifier.height(120.dp),
-        elevation = CardDefaults.cardElevation(14.dp)
+        elevation = CardDefaults.cardElevation(14.dp),
     ) {
         Column(
             Modifier.fillMaxSize(),
@@ -107,13 +108,14 @@ fun IntentDataItem(
         ) {
             Text(
                 text = "Data read from service",
-                fontSize = 18.sp
+                fontSize = 18.sp,
             )
             Spacer(Modifier.height(10.dp))
             if (isKeyboard) {
                 OutlinedTextField(
-                    modifier = Modifier
-                        .focusRequester(focusRequester),
+                    modifier =
+                        Modifier
+                            .focusRequester(focusRequester),
                     value = textFieldValue,
                     onValueChange = { textFieldValue = it },
                     singleLine = true,
@@ -122,7 +124,7 @@ fun IntentDataItem(
             } else {
                 Text(
                     text = intentData,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
             }
         }
@@ -132,5 +134,5 @@ fun IntentDataItem(
 @Preview
 @Composable
 fun MainScreenPrev() {
-    MainScreen(Modifier,false, "", {}, {})
+    MainScreen(Modifier, false, "", {}, {})
 }

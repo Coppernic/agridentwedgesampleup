@@ -22,8 +22,7 @@ import org.koin.core.annotation.Single
 @Single
 class ReaderManager(
     private val context: Context,
-): PowerListener {
-
+) : PowerListener {
     private var isPortOpened = false
     private var reader: Reader? = null
     private var pendingOperation: (() -> Unit)? = null
@@ -33,42 +32,48 @@ class ReaderManager(
     val isBusy: StateFlow<Boolean> = _isBusy.asStateFlow()
 
     // Initialize the reader
-    fun initializeReader(onInitialized: (Reader) -> Unit, baudRateValue: Int) {
+    fun initializeReader(
+        onInitialized: (Reader) -> Unit,
+        baudRateValue: Int,
+    ) {
         // Set the reader manager to busy as initialization is starting
         _isBusy.value = true
 
-        ReaderFactory.getInstance(context, object : InstanceListener<Reader> {
-            override fun onCreated(instance: Reader?) {
-                instance?.let {
-                    reader = it
-                    PowerManager.get().registerListener(this@ReaderManager)
-                    ConePeripheral.RFID_AGRIDENT_ABR200_GPIO.on(context)
+        ReaderFactory.getInstance(
+            context,
+            object : InstanceListener<Reader> {
+                override fun onCreated(instance: Reader?) {
+                    instance?.let {
+                        reader = it
+                        PowerManager.get().registerListener(this@ReaderManager)
+                        ConePeripheral.RFID_AGRIDENT_ABR200_GPIO.on(context)
 
-                    // Attempt to open the port and update state
-                    val result = openReaderPort(it, baudRateValue)
-                    isPortOpened = (result == CpcResult.RESULT.OK) // Update state based on result
+                        // Attempt to open the port and update state
+                        val result = openReaderPort(it, baudRateValue)
+                        isPortOpened = (result == CpcResult.RESULT.OK) // Update state based on result
 
-                    if (result == CpcResult.RESULT.OK) {
-                        Log.d("ReaderManager", "Reader port opened successfully.")
-                    } else {
-                        Log.e("ReaderManager", "Failed to open reader port. Error code: $result")
+                        if (result == CpcResult.RESULT.OK) {
+                            Log.d("ReaderManager", "Reader port opened successfully.")
+                        } else {
+                            Log.e("ReaderManager", "Failed to open reader port. Error code: $result")
+                        }
+
+                        onInitialized(it) // Notify that the reader is initialized, regardless of port status
+                    } ?: run {
+                        Log.d("ReaderManager", "Failed to create reader instance.")
+                        _isBusy.value = false // Set busy to false if instance creation fails
                     }
-
-                    onInitialized(it) // Notify that the reader is initialized, regardless of port status
-                } ?: run {
-                    Log.d("ReaderManager", "Failed to create reader instance.")
-                    _isBusy.value = false // Set busy to false if instance creation fails
                 }
-            }
 
-            override fun onDisposed(instance: Reader?) {
-                Log.d("ReaderManager", "Reader instance disposed.")
-                reader = null
-                isPortOpened = false // Reset the port state if the reader is disposed
-                cleanup(context, withPowerOff = false) // Release resources when disposed
-                _isBusy.value = false
-            }
-        })
+                override fun onDisposed(instance: Reader?) {
+                    Log.d("ReaderManager", "Reader instance disposed.")
+                    reader = null
+                    isPortOpened = false // Reset the port state if the reader is disposed
+                    cleanup(context, withPowerOff = false) // Release resources when disposed
+                    _isBusy.value = false
+                }
+            },
+        )
     }
 
     // Close the reader
@@ -151,7 +156,10 @@ class ReaderManager(
     }
 
     // Set config
-    fun setConfig(param: Parameters, onComplete: (CpcResult.RESULT) -> Unit) {
+    fun setConfig(
+        param: Parameters,
+        onComplete: (CpcResult.RESULT) -> Unit,
+    ) {
         if (_isBusy.value) {
             pendingOperation = { setConfig(param, onComplete) }
             return
@@ -235,8 +243,8 @@ class ReaderManager(
 
     /**
      * Get Amplitude value always returns 0.
+     * TODO should inspect why this behavior
      */
-    // Get amplitude
     fun getAmplitude() {
         // Check if the manager is already busy
         if (_isBusy.value) {
@@ -396,20 +404,29 @@ class ReaderManager(
         } ?: Log.e("ReaderManager", "Reader instance is null.")
     }
 
-    override fun onPowerUp(res: CpcResult.RESULT?, peripheral: Peripheral?) {
+    override fun onPowerUp(
+        res: CpcResult.RESULT?,
+        peripheral: Peripheral?,
+    ) {
         Log.d("ReaderManager", "Power up event received. Result: $res, Peripheral: $peripheral")
         _isBusy.value = false // ready for communication
         // Switch off Rfid
         toggleRFField(false)
     }
 
-    override fun onPowerDown(res: CpcResult.RESULT?, peripheral: Peripheral?) {
+    override fun onPowerDown(
+        res: CpcResult.RESULT?,
+        peripheral: Peripheral?,
+    ) {
         Log.d("ReaderManager", "Power down event received.")
         _isBusy.value = false // ready for starting
     }
 
-    private fun openReaderPort(reader: Reader, baudRateValue: Int = 9600): CpcResult.RESULT {
-        return try {
+    private fun openReaderPort(
+        reader: Reader,
+        baudRateValue: Int = 9600,
+    ): CpcResult.RESULT =
+        try {
             val result = reader.open(Defines.SerialDefines.AGRIDENT_READER_PORT, baudRateValue)
             if (result == CpcResult.RESULT.OK) {
                 Log.d("ReaderManager", "Reader port opened successfully.")
@@ -421,13 +438,12 @@ class ReaderManager(
             Log.e("ReaderManager", "Exception opening reader port: ${e.message}")
             CpcResult.RESULT.OPEN_FAIL // Return OPEN_FAIL if an exception occurs
         }
-    }
 
     /**
      * Checks whether fetching the config can proceed based on current state.
      */
-    private fun canFetchConfig(param: Parameters?): Boolean {
-        return when {
+    private fun canFetchConfig(param: Parameters?): Boolean =
+        when {
             _isBusy.value -> {
                 Log.w("ReaderManager", "Cannot fetch config: Reader is currently busy.")
                 false
@@ -446,10 +462,12 @@ class ReaderManager(
             }
             else -> true
         }
-    }
 
     // Cleanup when done
-    fun cleanup(context: Context, withPowerOff: Boolean = true) {
+    fun cleanup(
+        context: Context,
+        withPowerOff: Boolean = true,
+    ) {
         // Unregister power management listener
         PowerManager.get().unregisterAll()
         // Release any resources

@@ -10,19 +10,17 @@ import fr.coppernic.agridentwedgesampleup.ui.navigation.SetupNavGraph
 import fr.coppernic.agridentwedgesampleup.ui.theme.AgridentWedgeSampleUpTheme
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {
-
             val navController = rememberNavController()
 
             AgridentWedgeSampleUpTheme {
                 SetupNavGraph(
                     startDestination = Routes.MAIN_SCREEN,
-                    navController = navController
+                    navController = navController,
                 )
             }
         }

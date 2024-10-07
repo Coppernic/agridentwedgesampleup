@@ -29,36 +29,39 @@ fun BaudRateMenu(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Box {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    isDropDownExpanded.value = true
-                }
+                modifier =
+                    Modifier.clickable {
+                        isDropDownExpanded.value = true
+                    },
             ) {
                 Text(text = selectedItem) // Use the selectedItem instead of itemPosition
                 Image(
                     painter = painterResource(id = R.drawable.baseline_arrow_drop_down_24),
-                    contentDescription = "DropDown Icon"
+                    contentDescription = "DropDown Icon",
                 )
             }
             DropdownMenu(
                 expanded = isDropDownExpanded.value,
                 onDismissRequest = {
                     isDropDownExpanded.value = false
-                }
+                },
             ) {
                 list.forEach { username ->
-                    DropdownMenuItem(text = {
-                        Text(text = username)
-                    },
-                    onClick = {
-                        isDropDownExpanded.value = false
-                        onItemSelected(username) // Call the lambda function to update the selected item
-                    })
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = username)
+                        },
+                        onClick = {
+                            isDropDownExpanded.value = false
+                            onItemSelected(username) // Call the lambda function to update the selected item
+                        },
+                    )
                 }
             }
         }

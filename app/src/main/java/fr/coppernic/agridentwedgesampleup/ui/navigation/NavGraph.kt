@@ -44,7 +44,7 @@ fun SetupNavGraph(
                 onStartScan = { viewModel.startAgridentWedge(context) },
                 navigateToSetting = {
                     navController.navigate(Routes.SETTING_SCREEN)
-                }
+                },
             )
 
             LifecycleStartEffect(key1 = null) {
@@ -63,7 +63,7 @@ fun SetupNavGraph(
             val isRfidActive by viewModel.isRFFieldOn.collectAsStateWithLifecycle()
             val settingState by viewModel.settingState.collectAsStateWithLifecycle()
             val selectedBaud by viewModel.selectedBaudRate.collectAsStateWithLifecycle()
-            //val tagReadCount by viewModel.tagReadCount.collectAsStateWithLifecycle()
+            // val tagReadCount by viewModel.tagReadCount.collectAsStateWithLifecycle()
 
             var editType by remember { mutableStateOf<EditType>(EditType.NotVisible) }
 
@@ -89,7 +89,7 @@ fun SetupNavGraph(
                 isReaderOpen = isReaderOpen,
                 logMessages = logMessages,
                 selectedBaudRate = selectedBaud,
-                //tagReadCount = tagReadCount,
+                // tagReadCount = tagReadCount,
                 baudRates = viewModel.baudRates,
                 isRFFieldOn = isRfidActive,
                 onDeleteLogs = viewModel::clearLogs,
@@ -98,7 +98,7 @@ fun SetupNavGraph(
                 onRFFieldSwitchChange = viewModel::toggleRFField,
                 onEditDataItemClick = { editType = it },
                 onCloseOpenReader = viewModel::closeOpenReader,
-                onBaudRateSelected = { viewModel.onBaudRateSelected(it) }
+                onBaudRateSelected = { viewModel.onBaudRateSelected(it) },
             )
 
             EditDataDialog(
@@ -108,7 +108,7 @@ fun SetupNavGraph(
                     viewModel.setConfig(editType, it)
                     editType = EditType.NotVisible
                 },
-                onDismiss = { editType = EditType.NotVisible }
+                onDismiss = { editType = EditType.NotVisible },
             )
 
             DisabledScreen(isReaderBusy = isReaderBusy)

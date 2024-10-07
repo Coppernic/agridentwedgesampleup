@@ -21,20 +21,21 @@ import fr.coppernic.agridentwedgesampleup.ui.theme.Pink80
 @Composable
 fun DisabledScreen(
     modifier: Modifier = Modifier,
-    isReaderBusy: Boolean
+    isReaderBusy: Boolean,
 ) {
     if (isReaderBusy) {
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(color = Pink80.copy(alpha = 0.8F)),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .background(color = Pink80.copy(alpha = 0.8F)),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = "Module busy ...",
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                fontSize = 27.sp
+                fontSize = 27.sp,
             )
             Spacer(modifier = Modifier.height(30.dp))
             CircularProgressIndicator(

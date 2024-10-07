@@ -5,6 +5,8 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+apply(from = rootProject.file("gradle/ktlint.gradle"))
+
 android {
     namespace = "fr.coppernic.agridentwedgesampleup"
     compileSdk = 34
@@ -27,7 +29,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -58,7 +60,7 @@ android {
 }
 
 ksp {
-    arg("KOIN_CONFIG_CHECK","true")
+    arg("KOIN_CONFIG_CHECK", "true")
 }
 
 dependencies {

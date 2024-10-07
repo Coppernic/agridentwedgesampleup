@@ -8,6 +8,6 @@ object Coppernic {
     const val ACTION_AGRIDENT_READ = "fr.coppernic.tools.agrident.wedge.READ"
     const val ACTION_AGRIDENT_READ_STOP = "fr.coppernic.tools.agrident.wedge.read.STOP"
 
-    const val KEY_BARCODE_DATA = "BarcodeData";
-    const val AGRIDENT_WEDGE_Service = "fr.coppernic.tools.cpcagridentwedge"
+    const val KEY_BARCODE_DATA = "BarcodeData"
+    const val AGRIDENT_WEDGE_SERVICE = "fr.coppernic.tools.cpcagridentwedge"
 }

@@ -15,19 +15,20 @@ data class SettingState(
     val delayTime: String,
 ) {
     companion object {
-        fun toEmpty() = SettingState(
-            firmware = "N/A",
-            serialNumber = "N/A",
-            amplitude = "N/A",
-            rssi = "N/A",
-            fdxRssi = "N/A",
-            hdxRssi = "N/A",
-            hdxFreq = "N/A",
-            output = "N/A",
-            tagType = "N/A",
-            timout = "N/A",
-            baudrate = "N/A",
-            delayTime = "N/A",
-        )
+        fun toEmpty() =
+            SettingState(
+                firmware = "N/A",
+                serialNumber = "N/A",
+                amplitude = "N/A",
+                rssi = "N/A",
+                fdxRssi = "N/A",
+                hdxRssi = "N/A",
+                hdxFreq = "N/A",
+                output = "N/A",
+                tagType = "N/A",
+                timout = "N/A",
+                baudrate = "N/A",
+                delayTime = "N/A",
+            )
     }
 }

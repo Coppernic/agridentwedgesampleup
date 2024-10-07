@@ -33,9 +33,9 @@ import java.io.IOException
 
 @KoinViewModel
 class SettingViewModel(
-    private val readerManager: ReaderManager
-): ViewModel(), OnDataReceivedListener {
-
+    private val readerManager: ReaderManager,
+) : ViewModel(),
+    OnDataReceivedListener {
     private var lastTagId = ""
     private var tagReadCount = 0
     private val isAsciiFormat = false
@@ -98,7 +98,7 @@ class SettingViewModel(
 
                 _isReaderOpen.value = true
                 toggleRFField(false)
-            }
+            },
         )
     }
 
@@ -118,7 +118,10 @@ class SettingViewModel(
         }
     }
 
-    fun setConfig(type: EditType, newValue: String) {
+    fun setConfig(
+        type: EditType,
+        newValue: String,
+    ) {
         if (isBusy.value) {
             addLog("Reader is busy. Please wait.", false)
             return
@@ -136,8 +139,11 @@ class SettingViewModel(
         } ?: Log.d("SettingViewModel", "Parameter configuration failed for type: $type, newValue: $newValue")
     }
 
-    private fun getParamFromConfig(type: EditType, newValue: String): Parameters? {
-        return try {
+    private fun getParamFromConfig(
+        type: EditType,
+        newValue: String,
+    ): Parameters? =
+        try {
             when (type) {
                 is EditType.BaudRate -> {
                     Parameters(Parameters.BAUDRATE).apply {
@@ -169,7 +175,6 @@ class SettingViewModel(
             Log.e("SettingViewModel", "Error creating parameter from config: ${e.message}")
             null // Return null if there's an error
         }
-    }
 
     fun onBaudRateSelected(newBaudRate: String) {
         _selectedBaudRate.value = newBaudRate
@@ -187,13 +192,27 @@ class SettingViewModel(
 
     fun onDataItemClick(itemClick: GetDataItemClick) {
         when (itemClick) {
-            is GetDataItemClick.Firmware -> { readerManager.getFirmware() }
-            is GetDataItemClick.SerialNumber -> { readerManager.getSN() }
-            is GetDataItemClick.Amplitude -> { readerManager.getAmplitude() }
-            is GetDataItemClick.Rssi -> { readerManager.getRSSI() }
-            is GetDataItemClick.FdxRssi -> { readerManager.getFdxRssi() }
-            is GetDataItemClick.HdxRssi -> { readerManager.getHdxRssi() }
-            is GetDataItemClick.HdxFreq -> { readerManager.getHdxFreq() }
+            is GetDataItemClick.Firmware -> {
+                readerManager.getFirmware()
+            }
+            is GetDataItemClick.SerialNumber -> {
+                readerManager.getSN()
+            }
+            is GetDataItemClick.Amplitude -> {
+                readerManager.getAmplitude()
+            }
+            is GetDataItemClick.Rssi -> {
+                readerManager.getRSSI()
+            }
+            is GetDataItemClick.FdxRssi -> {
+                readerManager.getFdxRssi()
+            }
+            is GetDataItemClick.HdxRssi -> {
+                readerManager.getHdxRssi()
+            }
+            is GetDataItemClick.HdxFreq -> {
+                readerManager.getHdxFreq()
+            }
             is GetDataItemClick.TagType -> {
                 currentParam = Parameters(Parameters.TAG_TYPE)
                 readerManager.fetchConfig(currentParam)
@@ -217,7 +236,10 @@ class SettingViewModel(
         }
     }
 
-    override fun onTagIdReceived(message: AgridentMessage?, res: CpcResult.RESULT?) {
+    override fun onTagIdReceived(
+        message: AgridentMessage?,
+        res: CpcResult.RESULT?,
+    ) {
         // Log the received message
         if (message != null) {
             Log.d("SettingViewModel", "Received Tag ID: ${message.tag}")
@@ -234,7 +256,10 @@ class SettingViewModel(
         }
     }
 
-    override fun onFirmwareReceived(firmware: String?, res: CpcResult.RESULT?) {
+    override fun onFirmwareReceived(
+        firmware: String?,
+        res: CpcResult.RESULT?,
+    ) {
         // Check if firmware is null
         if (firmware != null) {
             Log.d("SettingViewModel", "Firmware received: $firmware")
@@ -247,7 +272,10 @@ class SettingViewModel(
         Log.d("SettingViewModel", "Result: $res")
     }
 
-    override fun onSerialNumberReceived(sn: String?, res: CpcResult.RESULT?) {
+    override fun onSerialNumberReceived(
+        sn: String?,
+        res: CpcResult.RESULT?,
+    ) {
         if (sn != null) {
             Log.d("SettingViewModel", "Serial Number received: $sn")
             _settingState.value = _settingState.value.copy(serialNumber = sn)
@@ -259,7 +287,10 @@ class SettingViewModel(
         Log.d("SettingViewModel", "Result: $res")
     }
 
-    override fun onGetConfigReceived(value: Byte, res: CpcResult.RESULT?) {
+    override fun onGetConfigReceived(
+        value: Byte,
+        res: CpcResult.RESULT?,
+    ) {
         Log.d("ConfigReceiver", "Received value: $value, Result: ${res?.name}")
 
         if (res == CpcResult.RESULT.OK) {
@@ -270,18 +301,38 @@ class SettingViewModel(
         }
     }
 
-    override fun onReaderInformationReceived(name: ReaderInformation, value: Int) {
-        when(name.name) {
-            MeasurementConstants.RSSI -> { _settingState.value = _settingState.value.copy(rssi = "$value $MILLIVOLT") }
-            MeasurementConstants.AMPLITUDE -> { _settingState.value = _settingState.value.copy(amplitude = "$value $MILLIVOLT") }
-            MeasurementConstants.AVERAGE_HDX_FREQ -> { _settingState.value = _settingState.value.copy(hdxFreq = "$value $HERTZ") }
-            MeasurementConstants.AVERAGE_HDX_RSSI -> { _settingState.value = _settingState.value.copy(hdxRssi = "$value $MILLIVOLT") }
-            MeasurementConstants.AVERAGE_FDX_RSSI -> { _settingState.value = _settingState.value.copy(fdxRssi = "$value $MILLIVOLT") }
+    override fun onReaderInformationReceived(
+        name: ReaderInformation,
+        value: Int,
+    ) {
+        when (name.name) {
+            MeasurementConstants.RSSI -> {
+                _settingState.value = _settingState.value.copy(rssi = "$value $MILLIVOLT")
+            }
+            MeasurementConstants.AMPLITUDE -> {
+                _settingState.value = _settingState.value.copy(amplitude = "$value $MILLIVOLT")
+            }
+            MeasurementConstants.AVERAGE_HDX_FREQ -> {
+                _settingState.value = _settingState.value.copy(hdxFreq = "$value $HERTZ")
+            }
+            MeasurementConstants.AVERAGE_HDX_RSSI -> {
+                _settingState.value = _settingState.value.copy(hdxRssi = "$value $MILLIVOLT")
+            }
+            MeasurementConstants.AVERAGE_FDX_RSSI -> {
+                _settingState.value = _settingState.value.copy(fdxRssi = "$value $MILLIVOLT")
+            }
         }
     }
 
-    override fun onCommandAckReceived(name: MessageType?, ack: Boolean) {}
-    override fun onGetConfigAllReceived(params: Array<out Parameters>?, res: CpcResult.RESULT?) {}
+    override fun onCommandAckReceived(
+        name: MessageType?,
+        ack: Boolean,
+    ) {}
+
+    override fun onGetConfigAllReceived(
+        params: Array<out Parameters>?,
+        res: CpcResult.RESULT?,
+    ) {}
 
     private fun updateParameterValue() {
         when (currentParam?.address) {
@@ -334,7 +385,10 @@ class SettingViewModel(
      * @param message Text to be added
      * @param isTagCount Boolean flag indicating if the log is a Tag count incrementation
      */
-    private fun addLog(message: String, isTagCount: Boolean = false) {
+    private fun addLog(
+        message: String,
+        isTagCount: Boolean = false,
+    ) {
         val maxLogLines = 2500
         val linesToRemove = 500
 
@@ -384,7 +438,7 @@ class SettingViewModel(
                                     addLog("TAG type : ${CpcBytes.byteArrayToString(sDataRead.tagType, sDataRead.tagType.size)}", false)
                                     addLog("Country : ${myIso11784Data.countryCode}", false)
                                     addLog("TAG ID : $lastTagId", false)
-                                    //addLog("Count: $tagReadCount", false) // Log initial count
+                                    // addLog("Count: $tagReadCount", false) // Log initial count
                                 }
                                 if (tagReadCount == 999) {
                                     tagReadCount = 0
@@ -408,7 +462,7 @@ class SettingViewModel(
                                 addLog("TAG type : ${String(sDataRead.tagType, Charsets.UTF_8)}", false)
                                 addLog("Country : ${String(myAsciiData.countryCode, Charsets.UTF_8)}", false)
                                 addLog("TAG ID : $lastTagId", false)
-                                //addLog("Count: $tagReadCount", false) // Log initial count
+                                // addLog("Count: $tagReadCount", false) // Log initial count
                             }
                             if (tagReadCount == 999) {
                                 tagReadCount = 0
@@ -427,9 +481,15 @@ class SettingViewModel(
                                 tagReadCount = 1 // Reset count to 1 for the new tag
                                 addLog("", false) // Separate logs with an empty line
                                 addLog("TAG type : ${CpcBytes.byteArrayToString(sDataRead.tagType, sDataRead.tagType.size)}", false)
-                                addLog("Country : ${CpcBytes.byteArrayToString(myCompactCodeData.countryCode, myCompactCodeData.countryCode.size)}", false)
+                                addLog(
+                                    "Country : ${CpcBytes.byteArrayToString(
+                                        myCompactCodeData.countryCode,
+                                        myCompactCodeData.countryCode.size,
+                                    )}",
+                                    false,
+                                )
                                 addLog("TAG ID : $lastTagId", false)
-                                //addLog("Count: $tagReadCount", false) // Log initial count
+                                // addLog("Count: $tagReadCount", false) // Log initial count
                             }
                             if (tagReadCount == 999) {
                                 tagReadCount = 0
@@ -447,7 +507,7 @@ class SettingViewModel(
                             addLog("", false) // Separate logs with an empty line
                             addLog("TAG type : ${CpcBytes.byteArrayToString(sDataRead.tagType, sDataRead.tagType.size)}", false)
                             addLog("TAG ID : $lastTagId", false)
-                            //addLog("Count: $tagReadCount", false) // Log initial count
+                            // addLog("Count: $tagReadCount", false) // Log initial count
                         }
                         if (tagReadCount == 999) {
                             tagReadCount = 0
@@ -461,38 +521,41 @@ class SettingViewModel(
                 addLog("UNKNOWN READER OUTPUT : ${CpcBytes.byteArrayToString(unknownFrame, unknownFrame.size)}", false)
             }
 
-            MessageType.SWITCH_RF_ON_OFF -> //TODO check if RF on or OFF
+            MessageType.SWITCH_RF_ON_OFF -> // TODO check if RF on or OFF
                 if (agridentMsg.isAck) {
                     addLog("RF Field Switched", false)
                 } else {
                     addLog("Switch ON/OFF RF Field command failed", false)
                 }
 
-            MessageType.GET_RF_STATE_RESULT -> if (agridentMsg.isAck) {
-                if (1 == agridentMsg.parameterValue) {
-                    _isRFFieldOn.value = true
-                    //binding.swRFField.isChecked = true
-                    addLog("RF is Activated", false)
+            MessageType.GET_RF_STATE_RESULT ->
+                if (agridentMsg.isAck) {
+                    if (1 == agridentMsg.parameterValue) {
+                        _isRFFieldOn.value = true
+                        // binding.swRFField.isChecked = true
+                        addLog("RF is Activated", false)
+                    } else {
+                        _isRFFieldOn.value = false
+                        // binding.swRFField.isChecked = false
+                        addLog("RF is NOT Activated", false)
+                    }
                 } else {
-                    _isRFFieldOn.value = false
-                    //binding.swRFField.isChecked = false
-                    addLog("RF is NOT Activated", false)
+                    addLog("Failed to get RSSI", false)
                 }
-            } else {
-                addLog("Failed to get RSSI", false)
-            }
 
-            MessageType.SET_SETTINGS_RESULT -> if (agridentMsg.isAck) {
-                addLog("New Setting set Successfully", false)
-            } else {
-                addLog("Fail to set new Settings", false)
-            }
+            MessageType.SET_SETTINGS_RESULT ->
+                if (agridentMsg.isAck) {
+                    addLog("New Setting set Successfully", false)
+                } else {
+                    addLog("Fail to set new Settings", false)
+                }
 
-            MessageType.RESET_CONF_RESULT -> if (agridentMsg.isAck) {
-                addLog("All Settings are reset", false)
-            } else {
-                addLog("Fail to reset Settings", false)
-            }
+            MessageType.RESET_CONF_RESULT ->
+                if (agridentMsg.isAck) {
+                    addLog("All Settings are reset", false)
+                } else {
+                    addLog("Fail to reset Settings", false)
+                }
 
             else -> {
                 addLog("Message $msg not treated in handleMessage", false)

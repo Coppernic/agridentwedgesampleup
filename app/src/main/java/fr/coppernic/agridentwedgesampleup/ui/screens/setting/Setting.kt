@@ -66,7 +66,7 @@ fun Setting(
     tagType: String,
     timeout: String,
     baudRate: String,
-    //tagReadCount: Int,
+    // tagReadCount: Int,
     output: String,
     delayTime: String,
     isRFFieldOn: Boolean,
@@ -83,51 +83,55 @@ fun Setting(
     onEditDataItemClick: (EditType) -> Unit,
     onDeleteLogs: () -> Unit,
 ) {
-    val items = listOf(
-        Items(R.string.firmware, firmware, GetDataItemClick.Firmware),
-        Items(R.string.serial_number, serialNumber, GetDataItemClick.SerialNumber),
-        Items(R.string.amplitude, amplitude, GetDataItemClick.Amplitude),
-        Items(R.string.rssi, rssi, GetDataItemClick.Rssi),
-        Items(R.string.fdx_rssi, fdxRssi, GetDataItemClick.FdxRssi),
-        Items(R.string.hdx_rssi, hdxRssi, GetDataItemClick.HdxRssi),
-        Items(R.string.hdx_freq, hdxFreq, GetDataItemClick.HdxFreq),
-        Items(R.string.delay_time, delayTime, GetDataItemClick.DelayTime)
-    )
+    val items =
+        listOf(
+            Items(R.string.firmware, firmware, GetDataItemClick.Firmware),
+            Items(R.string.serial_number, serialNumber, GetDataItemClick.SerialNumber),
+            Items(R.string.amplitude, amplitude, GetDataItemClick.Amplitude),
+            Items(R.string.rssi, rssi, GetDataItemClick.Rssi),
+            Items(R.string.fdx_rssi, fdxRssi, GetDataItemClick.FdxRssi),
+            Items(R.string.hdx_rssi, hdxRssi, GetDataItemClick.HdxRssi),
+            Items(R.string.hdx_freq, hdxFreq, GetDataItemClick.HdxFreq),
+            Items(R.string.delay_time, delayTime, GetDataItemClick.DelayTime),
+        )
 
-    val editableItems = listOf(
-        EditableItems(R.string.tag_type, tagType, GetDataItemClick.TagType) {
-            onEditDataItemClick(EditType.TagType(TagTypes.entries.first().value))
-        },
-        EditableItems(R.string.timeout, timeout, GetDataItemClick.Timeout) {
-            onEditDataItemClick(EditType.Timeout(Timing.entries.first().value))
-        },
-        EditableItems(R.string.baudrate, baudRate, GetDataItemClick.BaudRate) {
-            onEditDataItemClick(EditType.BaudRate(BaudRate.entries.first().byteValue))
-        },
-        EditableItems(R.string.output, output, GetDataItemClick.Output) {
-            onEditDataItemClick(EditType.OutputFormat(OutputFormat.entries.first().value))
-        },
-    )
+    val editableItems =
+        listOf(
+            EditableItems(R.string.tag_type, tagType, GetDataItemClick.TagType) {
+                onEditDataItemClick(EditType.TagType(TagTypes.entries.first().value))
+            },
+            EditableItems(R.string.timeout, timeout, GetDataItemClick.Timeout) {
+                onEditDataItemClick(EditType.Timeout(Timing.entries.first().value))
+            },
+            EditableItems(R.string.baudrate, baudRate, GetDataItemClick.BaudRate) {
+                onEditDataItemClick(EditType.BaudRate(BaudRate.entries.first().byteValue))
+            },
+            EditableItems(R.string.output, output, GetDataItemClick.Output) {
+                onEditDataItemClick(EditType.OutputFormat(OutputFormat.entries.first().value))
+            },
+        )
 
     Scaffold(
         topBar = {
             TopAppBar(
                 navigateBack = onNavigateBack,
-                isSettingScreen = true
+                isSettingScreen = true,
             )
-        }
+        },
     ) {
         Column(
-            modifier = modifier
-                .padding(it)
-                .fillMaxSize()
+            modifier =
+                modifier
+                    .padding(it)
+                    .fillMaxSize(),
         ) {
             Row(
-                modifier = Modifier
-                    .weight(1F)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .weight(1F)
+                        .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Button(
                     enabled = !isReaderBusy,
@@ -138,27 +142,30 @@ fun Setting(
                 BaudRateMenu(
                     list = baudRates,
                     selectedItem = selectedBaudRate,
-                    onItemSelected = onBaudRateSelected
+                    onItemSelected = onBaudRateSelected,
                 )
                 RfidSwitch(
                     enabled = !isReaderBusy && isReaderOpen,
                     isChecked = isRFFieldOn,
-                    onCheckedChange = onRFFieldSwitchChange
+                    onCheckedChange = onRFFieldSwitchChange,
                 )
             }
             Card(
-                modifier = Modifier
-                    .weight(4F)
-                    .padding(2.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = Purple80
-                )
+                modifier =
+                    Modifier
+                        .weight(4F)
+                        .padding(2.dp)
+                        .fillMaxWidth(),
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = Purple80,
+                    ),
             ) {
                 LazyColumn(
-                    modifier = modifier
-                        .padding(10.dp)
-                        .fillMaxSize()
+                    modifier =
+                        modifier
+                            .padding(10.dp)
+                            .fillMaxSize(),
                 ) {
                     items(items) { item ->
                         DataItem(
@@ -174,42 +181,46 @@ fun Setting(
                             title = stringResource(editableItems.titleResId),
                             result = editableItems.result,
                             onFetchData = { onGetDataItemClick(editableItems.getDataClick) },
-                            onEditData = editableItems.onEditClick
+                            onEditData = editableItems.onEditClick,
                         )
                     }
                 }
             }
             Spacer(modifier = Modifier.height(6.dp))
             Card(
-                modifier = Modifier
-                    .weight(4F)
-                    .padding(2.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = PurpleGrey80
-                )
+                modifier =
+                    Modifier
+                        .weight(4F)
+                        .padding(2.dp)
+                        .fillMaxWidth(),
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = PurpleGrey80,
+                    ),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(10.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(10.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         IconButton(onClick = onDeleteLogs) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete logs",
-                                tint = colorResource(R.color.top_app_bar_grey)
+                                tint = colorResource(R.color.top_app_bar_grey),
                             )
                         }
                     }
                     LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier =
+                            Modifier
+                                .fillMaxSize(),
                     ) {
                         items(logMessages) { log ->
                             Text(log, modifier = Modifier.padding(4.dp))
@@ -248,41 +259,45 @@ fun EditDataDialog(
             title = {
                 Column {
                     Text(
-                        text = when(type) {
-                            is EditType.BaudRate -> "BaudRate"
-                            is EditType.TagType -> "Tag Type"
-                            is EditType.Timeout -> "Timing"
-                            is EditType.OutputFormat -> "Output Format"
-                            is EditType.NotVisible -> ""
-                        }
+                        text =
+                            when (type) {
+                                is EditType.BaudRate -> "BaudRate"
+                                is EditType.TagType -> "Tag Type"
+                                is EditType.Timeout -> "Timing"
+                                is EditType.OutputFormat -> "Output Format"
+                                is EditType.NotVisible -> ""
+                            },
                     )
                     Text(text = "Select value")
                 }
             },
             text = {
                 // Determine the list and the currently selected item based on the EditType
-                val list = when(type) {
-                    is EditType.BaudRate -> baudRates
-                    is EditType.TagType -> tagTypes
-                    is EditType.Timeout -> timings
-                    is EditType.OutputFormat -> outputFormats
-                    is EditType.NotVisible -> listOf()
-                }
-
-                var selectedItem by remember { mutableStateOf(
-                    when(type) {
-                        is EditType.BaudRate -> selectedBaudRate
-                        is EditType.TagType -> selectedTagType
-                        is EditType.Timeout -> selectedTiming
-                        is EditType.OutputFormat -> selectedOutputFormat
-                        is EditType.NotVisible -> ""
+                val list =
+                    when (type) {
+                        is EditType.BaudRate -> baudRates
+                        is EditType.TagType -> tagTypes
+                        is EditType.Timeout -> timings
+                        is EditType.OutputFormat -> outputFormats
+                        is EditType.NotVisible -> listOf()
                     }
-                ) }
+
+                var selectedItem by remember {
+                    mutableStateOf(
+                        when (type) {
+                            is EditType.BaudRate -> selectedBaudRate
+                            is EditType.TagType -> selectedTagType
+                            is EditType.Timeout -> selectedTiming
+                            is EditType.OutputFormat -> selectedOutputFormat
+                            is EditType.NotVisible -> ""
+                        },
+                    )
+                }
 
                 // Update the correct state variable based on the selected EditType
                 val onItemSelected: (String) -> Unit = { newItem ->
                     selectedItem = newItem
-                    when(type) {
+                    when (type) {
                         is EditType.BaudRate -> selectedBaudRate = newItem
                         is EditType.TagType -> selectedTagType = newItem
                         is EditType.Timeout -> selectedTiming = newItem
@@ -295,7 +310,7 @@ fun EditDataDialog(
                     modifier = modifier,
                     list = list,
                     selectedItem = selectedItem,
-                    onItemSelected = onItemSelected
+                    onItemSelected = onItemSelected,
                 )
             },
             onDismissRequest = {
@@ -304,15 +319,16 @@ fun EditDataDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val selectedItem = when(type) {
-                            is EditType.BaudRate -> selectedBaudRate
-                            is EditType.OutputFormat -> selectedOutputFormat
-                            is EditType.TagType -> selectedTagType
-                            is EditType.Timeout -> selectedTiming
-                            else -> ""
-                        }
+                        val selectedItem =
+                            when (type) {
+                                is EditType.BaudRate -> selectedBaudRate
+                                is EditType.OutputFormat -> selectedOutputFormat
+                                is EditType.TagType -> selectedTagType
+                                is EditType.Timeout -> selectedTiming
+                                else -> ""
+                            }
                         onConfirm(selectedItem)
-                    }
+                    },
                 ) {
                     Text("Confirm")
                 }
@@ -321,11 +337,11 @@ fun EditDataDialog(
                 TextButton(
                     onClick = {
                         onDismiss()
-                    }
+                    },
                 ) {
                     Text("Dismiss")
                 }
-            }
+            },
         )
     }
 }
@@ -341,13 +357,13 @@ fun EditableDataItem(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text("$title $result")
-        IconButton(enabled = enabled,onClick = onFetchData) {
+        IconButton(enabled = enabled, onClick = onFetchData) {
             Icon(imageVector = Icons.Filled.Refresh, null)
         }
-        IconButton(enabled = enabled,onClick = onEditData) {
+        IconButton(enabled = enabled, onClick = onEditData) {
             Icon(imageVector = Icons.Filled.Edit, null)
         }
     }
@@ -363,7 +379,7 @@ fun DataItem(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text("$title $result")
         IconButton(enabled = enabled, onClick = onFetchData) {
@@ -381,7 +397,7 @@ fun RfidSwitch(
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text("Rfid")
         Spacer(modifier = Modifier.width(4.dp))
@@ -390,17 +406,18 @@ fun RfidSwitch(
             enabled = enabled,
             checked = isChecked,
             onCheckedChange = onCheckedChange,
-            thumbContent = if (isChecked) {
-                {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = null,
-                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                    )
-                }
-            } else {
-                null
-            }
+            thumbContent =
+                if (isChecked) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                        )
+                    }
+                } else {
+                    null
+                },
         )
     }
 }
@@ -423,23 +440,24 @@ private fun SettingPrev() {
         baudRate = "9600",
         selectedBaudRate = "",
         output = "",
-        //tagReadCount = -1,
+        // tagReadCount = -1,
         baudRates = listOf(),
         delayTime = "10ms",
         isReaderBusy = false,
         isReaderOpen = true,
-        logMessages = listOf(
-            "test00",
-            "test01",
-            "test02",
-            "test03",
-            "test04",
-        ),
+        logMessages =
+            listOf(
+                "test00",
+                "test01",
+                "test02",
+                "test03",
+                "test04",
+            ),
         isRFFieldOn = true,
         onRFFieldSwitchChange = {},
         onDeleteLogs = {},
         onEditDataItemClick = {},
         onCloseOpenReader = {},
-        onBaudRateSelected = {}
+        onBaudRateSelected = {},
     )
 }
