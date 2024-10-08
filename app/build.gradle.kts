@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "fr.coppernic.agridentwedgesampleup"
-        minSdk = 27
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
