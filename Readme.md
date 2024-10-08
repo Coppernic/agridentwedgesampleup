@@ -1,4 +1,4 @@
-# Agrident Module Interaction Sample
+# agridentwedgesample
 
 ## Overview
 
@@ -17,4 +17,4 @@ This sample demonstrates how to interact with the Agrident module using COne2 wh
 
 ## Conclusion
 
-Following these guidelines will help ensure the longevity and proper functionality of the Agrident module. For more details, please refer to the official documentation or contact support if you have any questions.
+Following these guidelines will help maintain the Agrident module's longevity and ensure its proper functionality. For further assistance or inquiries, please reach out to Coppernic support.
