@@ -130,14 +130,64 @@ class SettingViewModel(
         Log.d("SettingViewModel", "type: $type, newValue: $newValue")
 
         getParamFromConfig(type, newValue)?.let { param ->
+            // Check if the current setting value is the same as the new value to set
+            val isSameValue = isSameConfigValue(type, newValue)
+
+            if (isSameValue) {
+                Log.d("SettingViewModel", "Same value, will not rewrite.")
+                return
+            }
+
+            // Set the configuration through the reader manager
             readerManager.setConfig(param) { result ->
-                when (result) {
-                    CpcResult.RESULT.OK -> addLog("Configuration updated successfully", false)
-                    else -> addLog("Failed to update configuration: $result", false)
-                }
+                val logMessage =
+                    if (result == CpcResult.RESULT.OK) {
+                        updateSettingState(type, newValue)
+                        "Configuration updated successfully"
+                    } else {
+                        "Failed to update configuration: $result"
+                    }
+                addLog(logMessage, false)
             }
         } ?: Log.d("SettingViewModel", "Parameter configuration failed for type: $type, newValue: $newValue")
     }
+
+    private fun updateSettingState(
+        type: EditType,
+        newValue: String,
+    ) {
+        _settingState.value =
+            when (type) {
+                is EditType.BaudRate -> _settingState.value.copy(baudrate = newValue)
+                is EditType.OutputFormat -> _settingState.value.copy(output = newValue)
+                is EditType.TagType -> _settingState.value.copy(tagType = newValue)
+                is EditType.Timeout -> _settingState.value.copy(timout = newValue)
+                else -> _settingState.value
+            }
+    }
+
+    /**
+     * Check if the new value matches the existing value in the setting state to avoid unnecessary writes.
+     */
+    private fun isSameConfigValue(
+        type: EditType,
+        newValue: String,
+    ): Boolean =
+        when (type) {
+            is EditType.BaudRate -> {
+                _settingState.value.baudrate == newValue
+            }
+            is EditType.OutputFormat -> {
+                _settingState.value.output == newValue
+            }
+            is EditType.TagType -> {
+                _settingState.value.tagType == newValue
+            }
+            is EditType.Timeout -> {
+                _settingState.value.timout == newValue
+            }
+            else -> true
+        }
 
     private fun getParamFromConfig(
         type: EditType,
@@ -214,26 +264,26 @@ class SettingViewModel(
                 readerManager.getHdxFreq()
             }
             is GetDataItemClick.TagType -> {
-                currentParam = Parameters(Parameters.TAG_TYPE)
-                readerManager.fetchConfig(currentParam)
+                handleGetDataItemClick(Parameters.TAG_TYPE)
             }
             is GetDataItemClick.Timeout -> {
-                currentParam = Parameters(Parameters.TIMING)
-                readerManager.fetchConfig(currentParam)
+                handleGetDataItemClick(Parameters.TIMING)
             }
             is GetDataItemClick.BaudRate -> {
-                currentParam = Parameters(Parameters.BAUDRATE)
-                readerManager.fetchConfig(currentParam)
+                handleGetDataItemClick(Parameters.BAUDRATE)
             }
             is GetDataItemClick.DelayTime -> {
-                currentParam = Parameters(Parameters.DELAYTIME)
-                readerManager.fetchConfig(currentParam)
+                handleGetDataItemClick(Parameters.DELAYTIME)
             }
             is GetDataItemClick.Output -> {
-                currentParam = Parameters(Parameters.OUTPUT_FORMAT)
-                readerManager.fetchConfig(currentParam)
+                handleGetDataItemClick(Parameters.OUTPUT_FORMAT)
             }
         }
+    }
+
+    private fun handleGetDataItemClick(parameterType: Byte) {
+        currentParam = Parameters(parameterType)
+        readerManager.fetchConfig(currentParam)
     }
 
     override fun onTagIdReceived(

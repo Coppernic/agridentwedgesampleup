@@ -98,15 +98,19 @@ fun Setting(
     val editableItems =
         listOf(
             EditableItems(R.string.tag_type, tagType, GetDataItemClick.TagType) {
+                onGetDataItemClick(GetDataItemClick.TagType)
                 onEditDataItemClick(EditType.TagType(TagTypes.entries.first().value))
             },
             EditableItems(R.string.timeout, timeout, GetDataItemClick.Timeout) {
+                onGetDataItemClick(GetDataItemClick.Timeout)
                 onEditDataItemClick(EditType.Timeout(Timing.entries.first().value))
             },
             EditableItems(R.string.baudrate, baudRate, GetDataItemClick.BaudRate) {
+                onGetDataItemClick(GetDataItemClick.BaudRate)
                 onEditDataItemClick(EditType.BaudRate(BaudRate.entries.first().byteValue))
             },
             EditableItems(R.string.output, output, GetDataItemClick.Output) {
+                onGetDataItemClick(GetDataItemClick.Output)
                 onEditDataItemClick(EditType.OutputFormat(OutputFormat.entries.first().value))
             },
         )
