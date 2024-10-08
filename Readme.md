@@ -13,7 +13,7 @@ This sample demonstrates how to interact with the Agrident module using COne2 wh
     - Do not power off the module while it is rewriting a new configuration. Only power off the module after it has finished the configuration write process to avoid corruption of the module's memory.
 
 3. **Limit Configuration Changes**:
-    - Refrain from changing settings excessively. Making hundreds or thousands of config changes in a short period can permanently damage the EEPROM, which is not covered by warranty.
+    - Refrain from changing settings excessively. Making hundreds or thousands of config changes in a short period can permanently damage the EEPROM.
 
 ## Conclusion
 
