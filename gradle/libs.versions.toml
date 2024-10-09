@@ -3,7 +3,6 @@ agp = "8.6.1"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 koin = "4.0.0"
-datastore = "1.1.1"
 koinAnnotations = "1.3.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -27,9 +26,6 @@ koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref =
 # Coppernic dependencies
 coppernic-cpc-core = { module = "fr.coppernic.sdk.core:CpcCore", version.ref = "cpcCore" }
 coppernic-cpc-agrident = { module = "fr.coppernic.sdk.agrident:CpcAgrident", version.ref = "cpcAgrident" }
-
-# Datastore
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
